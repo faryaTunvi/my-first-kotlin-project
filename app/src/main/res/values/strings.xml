@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Defence Shotokan Karate</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="hint_word">Word…</string>
+    <string name="button_save">Save</string>
+    <string name="empty_not_saved">Word not saved because it is empty.</string>
+    <string name="add_word">Add word</string>
+    <string name="main_fragment">Main Fragment</string>
+    <string name="add_fragment">Add User</string>
+    <string name="page_title">Enter Your Data</string>
+</resources>

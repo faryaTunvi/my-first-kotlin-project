@@ -1,0 +1,48 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:shrinkColumns="*"
+    android:stretchColumns="*"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TableRow
+        android:id="@+id/row1"
+        android:layout_width="fill_parent"
+        android:background="@drawable/border"
+        android:layout_height="wrap_content">
+
+        <!-- Add elements/columns in the first row-->
+        <TextView
+            android:id="@+id/itemName"
+            style="@style/word_title"
+            tools:text="name"
+            android:layout_weight="0.3"
+            android:layout_gravity="start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/itemEmail"
+            style="@style/word_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:maxLines="2"
+            android:layout_weight="0.5"
+            tools:text="email" />
+
+        <ImageView
+            android:id="@+id/deleteIcon"
+            android:src="@drawable/ic_baseline_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:layout_gravity="end"
+            android:scaleType="center"
+            android:layout_weight="0.2"
+            tools:text="email" />
+
+    </TableRow>
+
+</TableLayout>

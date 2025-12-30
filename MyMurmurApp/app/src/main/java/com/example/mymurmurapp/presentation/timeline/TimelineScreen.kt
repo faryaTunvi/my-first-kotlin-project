@@ -42,7 +42,7 @@ fun TimelineScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Murmur") },
+                title = { Text("Feeds") },
                 actions = {
                     IconButton(onClick = onNavigateToOwnProfile) {
                         Icon(Icons.Default.Person, contentDescription = "Profile")

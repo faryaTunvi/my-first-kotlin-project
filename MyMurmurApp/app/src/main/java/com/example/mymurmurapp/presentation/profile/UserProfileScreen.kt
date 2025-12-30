@@ -25,6 +25,7 @@ fun UserProfileScreen(
     viewModel: UserProfileViewModel,
     onNavigateBack: () -> Unit,
     onNavigateToUser: (String) -> Unit,
+    onLogout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -67,11 +68,16 @@ fun UserProfileScreen(
                 CircularProgressIndicator()
             }
         } else {
-            LazyColumn(
-                modifier = modifier
+            Box(
+                modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
             ) {
+                LazyColumn(
+                    modifier = modifier
+                        .fillMaxSize()
+                        .padding(bottom = if (uiState.isOwnProfile) 66.dp else 0.dp)
+                ) {
                 // User Profile Header
                 item {
                     uiState.user?.let { user ->
@@ -134,12 +140,12 @@ fun UserProfileScreen(
                                 ) {
                                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                         Text(
-                                            text = uiState.murmurs.size.toString(),
+                                            text = uiState.feeds.size.toString(),
                                             style = MaterialTheme.typography.titleLarge,
                                             fontWeight = FontWeight.Bold
                                         )
                                         Text(
-                                            text = "Murmurs",
+                                            text = "Feeds",
                                             style = MaterialTheme.typography.bodySmall,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant
                                         )
@@ -193,18 +199,18 @@ fun UserProfileScreen(
                     }
                 }
 
-                // Murmurs Section Header
+                // Feeds Section Header
                 item {
                     Text(
-                        text = "Murmurs",
+                        text = "Feeds",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     )
                 }
 
-                // User Murmurs List
-                if (uiState.murmurs.isEmpty() && !uiState.isLoading) {
+                // User Feeds List
+                if (uiState.feeds.isEmpty() && !uiState.isLoading) {
                     item {
                         Box(
                             modifier = Modifier
@@ -213,7 +219,7 @@ fun UserProfileScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "No murmurs yet",
+                                text = "No feeds yet",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -221,7 +227,7 @@ fun UserProfileScreen(
                     }
                 } else {
                     items(
-                        items = uiState.murmurs,
+                        items = uiState.feeds,
                         key = { it.id }
                     ) { murmur ->
                         AnimatedVisibility(
@@ -252,7 +258,7 @@ fun UserProfileScreen(
                     }
 
                     // Loading indicator
-                    if (uiState.isLoading && uiState.murmurs.isNotEmpty()) {
+                    if (uiState.isLoading && uiState.feeds.isNotEmpty()) {
                         item {
                             Box(
                                 modifier = Modifier
@@ -265,6 +271,26 @@ fun UserProfileScreen(
                         }
                     }
                 }
+            }
+
+            // Logout Button - only show on own profile, aligned at the bottom
+            if (uiState.isOwnProfile) {
+                Button(
+                    onClick = {
+                        viewModel.logout(onLogout)
+                    },
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .height(50.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error
+                    )
+                ) {
+                    Text("Logout", style = MaterialTheme.typography.titleMedium)
+                }
+            }
             }
         }
     }

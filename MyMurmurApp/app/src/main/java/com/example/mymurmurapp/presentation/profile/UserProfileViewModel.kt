@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 data class UserProfileUiState(
     val user: User? = null,
-    val murmurs: List<Murmur> = emptyList(),
+    val feeds: List<Murmur> = emptyList(),
     val isLoading: Boolean = false,
     val isFollowing: Boolean = false,
     val error: String? = null,
@@ -78,7 +78,7 @@ class UserProfileViewModel(
             getUserMurmursUseCase(userId, 0)
                 .onSuccess { murmurs ->
                     _uiState.value = _uiState.value.copy(
-                        murmurs = murmurs,
+                        feeds = murmurs,
                         isLoading = false,
                         hasMorePages = murmurs.size >= 10,
                         currentPage = 0
@@ -103,7 +103,7 @@ class UserProfileViewModel(
                 getUserMurmursUseCase(user.id, nextPage)
                     .onSuccess { murmurs ->
                         _uiState.value = _uiState.value.copy(
-                            murmurs = _uiState.value.murmurs + murmurs,
+                            feeds = _uiState.value.feeds + murmurs,
                             isLoading = false,
                             hasMorePages = murmurs.size >= 10,
                             currentPage = nextPage
@@ -146,8 +146,8 @@ class UserProfileViewModel(
         viewModelScope.launch {
             deleteMurmurUseCase(murmurId)
                 .onSuccess {
-                    val updatedMurmurs = _uiState.value.murmurs.filter { it.id != murmurId }
-                    _uiState.value = _uiState.value.copy(murmurs = updatedMurmurs)
+                    val updatedMurmurs = _uiState.value.feeds.filter { it.id != murmurId }
+                    _uiState.value = _uiState.value.copy(feeds = updatedMurmurs)
                 }
                 .onFailure { error ->
                     _uiState.value = _uiState.value.copy(
@@ -159,6 +159,20 @@ class UserProfileViewModel(
 
     fun clearError() {
         _uiState.value = _uiState.value.copy(error = null)
+    }
+
+    fun logout(onLogoutSuccess: () -> Unit) {
+        viewModelScope.launch {
+            authRepository.signOut()
+                .onSuccess {
+                    onLogoutSuccess()
+                }
+                .onFailure { error ->
+                    _uiState.value = _uiState.value.copy(
+                        error = error.message ?: "Failed to logout"
+                    )
+                }
+        }
     }
 }
 

@@ -153,6 +153,11 @@ fun MurmurApp() {
                 onNavigateBack = { navController.popBackStack() },
                 onNavigateToUser = { newUserId ->
                     navController.navigate(Screen.UserProfile.createRoute(newUserId))
+                },
+                onLogout = {
+                    navController.navigate(Screen.SignIn.route) {
+                        popUpTo(0) { inclusive = true }
+                    }
                 }
             )
         }
